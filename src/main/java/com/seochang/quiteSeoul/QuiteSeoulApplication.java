@@ -1,4 +1,4 @@
-package com.quiteSeoul;
+package com.seochang.quiteSeoul;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

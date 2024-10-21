@@ -1,4 +1,4 @@
-package com.quiteSeoul;
+package com.seochang.quiteSeoul;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
