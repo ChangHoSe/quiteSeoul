@@ -11,18 +11,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "place")
+@Table(name = "comment")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Place {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer placeId;
+    private Integer commentId;
 
-    private String description;
-    private String placeImage;
-    private double congestionLevel;
+    private int likeCount;
+    private double rating;
 }

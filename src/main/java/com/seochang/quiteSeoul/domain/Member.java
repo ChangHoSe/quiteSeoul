@@ -11,18 +11,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "place")
+@Table(name = "member")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Place {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer placeId;
+    private Integer memberId;
 
-    private String description;
-    private String placeImage;
-    private double congestionLevel;
+    private String loginId;
+    private String loginPw;
+    private String email;
+    private String nickname;
 }
