@@ -22,6 +22,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer commentId;
 
+    private String content;
     private int likeCount;
     private double rating;
 }

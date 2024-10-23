@@ -11,5 +11,8 @@ public class BasicController {
         return "index";
     }
 
+    @GetMapping("/register")
+    public String register() {return "register";}
+
 
 }
