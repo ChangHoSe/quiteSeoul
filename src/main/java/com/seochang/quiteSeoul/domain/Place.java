@@ -1,4 +1,4 @@
 package com.seochang.quiteSeoul.domain;
 
-public class Post {
+public class Place {
 }

@@ -1,4 +1,4 @@
 package com.seochang.quiteSeoul.repository;
 
-public class PostRepository {
+public class PlaceRepository {
 }
