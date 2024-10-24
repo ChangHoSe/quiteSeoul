@@ -85,3 +85,7 @@ header {
     object-fit: cover;
     margin-bottom: 15px;
 }
+.input-group-text {
+    cursor: pointer;
+}
+
