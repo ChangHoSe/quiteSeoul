@@ -1,6 +1,5 @@
 package com.seochang.quiteSeoul.data;
 
-import com.seochang.quiteSeoul.domain.Place;
 import com.seochang.quiteSeoul.domain.PlaceData;
 import com.seochang.quiteSeoul.repository.PlaceDataRepository;
 import com.seochang.quiteSeoul.repository.PlaceRepository;
@@ -12,7 +11,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
