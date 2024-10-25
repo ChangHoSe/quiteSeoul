@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>조용한 서울</title>
 </head>
 <body><div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
@@ -14,90 +14,34 @@
             <h1>조용한 서울</h1>
         </header>
         <main>
+            <!-- 첫 번째 행 -->
             <div class="row justify-content-center align-items-center">
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 1">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 1</p>
+                <div class="col-md-2 mb-4" th:each="placeName, iterStat : ${placeNames}" th:if="${iterStat.index < 5}">
+                    <a th:href="@{'/place/' + ${placeName}}" class="card-link text-decoration-none text-dark">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/150" class="card-img-top" th:alt="'추천 공간 ' + ${iterStat.index + 1}">
+                            <div class="card-body text-center">
+                                <p class="card-text" th:text="${placeName}">조용한 장소</p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 2">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 2</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 3">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 3</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 4">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 4</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 5">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 5</p>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             </div>
+
+            <!-- 두 번째 행 -->
             <div class="row justify-content-center align-items-center">
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 6">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 6</p>
+                <div class="col-md-2 mb-4" th:each="placeName, iterStat : ${placeNames}" th:if="${iterStat.index >= 5 && iterStat.index < 10}">
+                    <a th:href="@{'/place/' + ${placeName}}" class="card-link text-decoration-none text-dark">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/150" class="card-img-top" th:alt="'추천 공간 ' + ${iterStat.index + 1}">
+                            <div class="card-body text-center">
+                                <p class="card-text" th:text="${placeName}">조용한 장소</p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 7">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 7</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 8">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 8</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 9">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 9</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="추천 공간 10">
-                        <div class="card-body text-center">
-                            <p class="card-text">조용한 장소 10</p>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             </div>
+
             <p class="text-center text-muted">도시 상황에 따라 10개 미만으로 추천될 수 있습니다.</p>
             <a href="/test-click" class="btn btn-primary">테스트 클릭</a>
         </main>

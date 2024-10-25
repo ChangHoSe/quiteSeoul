@@ -5,6 +5,7 @@ import com.opencsv.exceptions.CsvException;
 import com.seochang.quiteSeoul.domain.Place;
 import com.seochang.quiteSeoul.domain.PlaceType;
 import com.seochang.quiteSeoul.repository.PlaceRepository;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
