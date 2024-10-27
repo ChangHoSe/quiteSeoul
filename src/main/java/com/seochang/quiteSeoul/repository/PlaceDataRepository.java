@@ -25,4 +25,14 @@ ORDER BY JSON_EXTRACT(pd.place_information, '$.LIVE_PPLTN_STTS[0][0].AREA_PPLTN_
 LIMIT 10;
 """, nativeQuery = true)
     List<String> findTop10PlacesIds(); // TODO : 선호 테마 파라미터로 넣어서 관련 장소만 출력 예정
+
+    @Query(value = """
+SELECT JSON_EXTRACT(place_information, '$.WEATHER_STTS')
+FROM placedata
+WHERE place_id = :placeId
+ORDER BY collected_at DESC 
+LIMIT 1
+""", nativeQuery = true)
+    Optional<String> findLastestWeatherStatus(Integer placeId);
+
 }

@@ -1,7 +1,11 @@
 package com.seochang.quiteSeoul.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seochang.quiteSeoul.domain.Place;
 import com.seochang.quiteSeoul.domain.PlaceData;
+import com.seochang.quiteSeoul.domain.dto.FcstTodayDTO;
+import com.seochang.quiteSeoul.domain.dto.PlaceWeatherDTO;
 import com.seochang.quiteSeoul.repository.PlaceDataRepository;
 import com.seochang.quiteSeoul.repository.PlaceRepository;
 import java.io.BufferedReader;
@@ -42,5 +46,49 @@ public class PlaceService {
             placeNames.add(placeName);
         }
         return placeNames;
+    }
+
+    public Optional<PlaceWeatherDTO> getWeatherInfoByRegion(String placeName) {
+        return placeRepository.findByPlaceName(placeName)
+                .flatMap(place -> placeDataRepository.findLastestWeatherStatus(place.getPlaceId()))
+                .flatMap(this::handleWeatherStatus);
+    }
+
+    private Optional<PlaceWeatherDTO> handleWeatherStatus(String weatherStatus) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(weatherStatus);
+            JsonNode weatherStatusNode = rootNode.get(0).get(0);
+
+            PlaceWeatherDTO placeWeatherDTO = new PlaceWeatherDTO();
+            placeWeatherDTO.setPm10(Integer.parseInt(weatherStatusNode.path("PM10").asText()));
+            placeWeatherDTO.setPm25(Integer.parseInt(weatherStatusNode.path("PM25").asText()));
+            placeWeatherDTO.setTemperature(Double.parseDouble(weatherStatusNode.path("TEMP").asText()));
+            placeWeatherDTO.setMaxTemp(Double.parseDouble(weatherStatusNode.path("MAX_TEMP").asText()));
+            placeWeatherDTO.setMinTemp(Double.parseDouble(weatherStatusNode.path("MIN_TEMP").asText()));
+            placeWeatherDTO.setAirIdx(weatherStatusNode.path("AIR_IDX").asText());
+            placeWeatherDTO.setHumidity(Integer.parseInt(weatherStatusNode.path("HUMIDITY").asText()));
+
+            // 24시간 예보 목록 추출 및 설정
+            List<FcstTodayDTO> fcstTodayDTOList = new ArrayList<>();
+            JsonNode fcst24HoursArray = weatherStatusNode.path("FCST24HOURS");
+            for (JsonNode fcstNode : fcst24HoursArray) {
+                FcstTodayDTO fcstTodayDTO = new FcstTodayDTO();
+                fcstTodayDTO.setTemp(Integer.parseInt(fcstNode.path("TEMP").asText()));
+                fcstTodayDTO.setFcstDt(fcstNode.path("FCST_DT").asText());
+                fcstTodayDTO.setSkyStts(fcstNode.path("PRECPT_TYPE").asText());
+                fcstTodayDTO.setRainChance(Integer.parseInt(fcstNode.path("RAIN_CHANCE").asText()));
+                fcstTodayDTO.setPrecipitation(fcstNode.path("PRECIPITATION").asText());
+
+                fcstTodayDTOList.add(fcstTodayDTO);
+            }
+
+            placeWeatherDTO.setFcstTodayDTOList(fcstTodayDTOList);
+            return Optional.of(placeWeatherDTO);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 }

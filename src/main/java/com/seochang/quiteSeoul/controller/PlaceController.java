@@ -1,8 +1,11 @@
 package com.seochang.quiteSeoul.controller;
 
+import com.seochang.quiteSeoul.domain.dto.PlaceWeatherDTO;
 import com.seochang.quiteSeoul.service.PlaceService;
 import com.seochang.quiteSeoul.data.InitialDataService;
 import java.util.List;
+import java.util.Optional;
+import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -29,6 +32,10 @@ public class PlaceController {
     @GetMapping("/place/{placeName}")
     public String detailPlace(@PathVariable String placeName, Model model) {
         model.addAttribute("placeName", placeName);
+        placeService.getWeatherInfoByRegion(placeName)
+                .ifPresent(placeWeatherDTO -> {
+                    log.info(placeWeatherDTO.toString());
+                });
         return "detail";
     }
 
