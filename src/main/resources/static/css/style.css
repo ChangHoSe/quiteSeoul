@@ -108,11 +108,12 @@ header {
     padding: 0 15px;
 }
 
+
 .weather-card {
     background: linear-gradient(180deg, #EBF5FF 0%, #FFFFFF 100%);
     border: 1px solid #DBEAFE;
     border-radius: 0.5rem;
-    height: 100%;
+    height: 85%;
     flex: 0 0 calc(25% - 10px); /* flex-grow, flex-shrink, flex-basis 설정 */
     margin: 10px;
 }
@@ -133,5 +134,64 @@ header {
     padding: 0.5rem;
     border-radius: 0.5rem;
     margin: 0.5rem 0;
+}
+
+.weather-heading {
+    font-weight: bold;
+    font-size: 1.5rem; /* 원하는 글씨 크기로 조정 */
+}
+/*temp*/
+.weather-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.temperature {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.temp-details {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.air-quality-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.air-quality-block {
+    flex: 1;
+    padding: 10px;
+    margin: 0 5px;
+    text-align: center;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.air-quality-block span:first-child {
+    display: block;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.air-quality-block.good {
+    background-color: #4a90e2; /* 파랑 */
+}
+
+.air-quality-block.moderate {
+    background-color: #7ed321; /* 초록 */
 }
 

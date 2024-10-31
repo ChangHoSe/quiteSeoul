@@ -19,13 +19,33 @@
         <div class="row mt-4">
             <div class="col-md-8 mx-auto text-center">
                 <div class="p-3 border bg-light mb-3">
-                    <h5>날씨/환경 정보</h5>
-                    <p>현재 온도: <span th:text="${placeWeatherDTO.temperature}">N/A</span> 체감 온도: <span th:text="${placeWeatherDTO.sensibleTemp}">N/A</span> </p>
-                    <p>현재 습도: <span th:text="${placeWeatherDTO.humidity}">N/A</span></p>
-                    <p>미세먼지: <span th:text="${placeWeatherDTO.pm10}">N/A</span> (<span th:text="${placeWeatherDTO.pm10Index}">N/A</span>)  </p>
-                    <p>초미세먼지: <span th:text="${placeWeatherDTO.pm25}">N/A</span> (<span th:text="${placeWeatherDTO.pm25Index}">N/A</span>) </p>
+                    <div class="weather-container text-center mb-3">
+                        <span class="weather-heading">현재 날씨</span>
+                        <!-- 현재 온도 -->
+                        <div class="temperature">
+                            <span class="temp-value" th:text="${placeWeatherDTO.temperature}">N/A</span>°
+                        </div>
 
-                    <span class="fw-bold fs-4">날씨 정보 그래프</span>
+                        <!-- 체감 온도, 습도 및 풍속 -->
+                        <div class="temp-details">
+                            체감 온도 <span th:text="${placeWeatherDTO.sensibleTemp}">N/A</span>° ・ 습도 <span th:text="${placeWeatherDTO.humidity}">N/A</span>%
+                        </div>
+
+                        <!-- 미세먼지 정보 -->
+                        <div class="air-quality-container">
+                            <div class="air-quality-block good">
+                                <span>미세먼지</span>
+                                <span th:text="${placeWeatherDTO.pm10Index}">N/A</span> (<span th:text="${placeWeatherDTO.pm10}">N/A</span>)
+                            </div>
+                            <div class="air-quality-block moderate">
+                                <span>초미세먼지</span>
+                                <span th:text="${placeWeatherDTO.pm25Index}">N/A</span> (<span th:text="${placeWeatherDTO.pm25}">N/A</span>)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <span class="weather-heading">일기 예보</span>
                     <div class="d-flex flex-row flex-wrap">
                         <div th:each="fcstTodayDTO : ${placeWeatherDTO.fcstTodayDTOList}" class="weather-card p-3 text-center mb-3 mx-1" >
                             <!-- 카드 내용 -->
