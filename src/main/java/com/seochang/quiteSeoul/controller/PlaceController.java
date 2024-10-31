@@ -34,6 +34,7 @@ public class PlaceController {
         model.addAttribute("placeName", placeName);
         placeService.getWeatherInfoByRegion(placeName)
                 .ifPresent(placeWeatherDTO -> {
+                    model.addAttribute("placeWeatherDTO", placeWeatherDTO);
                     log.info(placeWeatherDTO.toString());
                 });
         return "detail";

@@ -11,6 +11,9 @@ public class PlaceWeatherDTO {
     private int pm10;
     private int pm25;
 
+    private String pm10Index;
+    private String pm25Index;
+
     private double temperature;
     private double maxTemp;
     private double minTemp;
