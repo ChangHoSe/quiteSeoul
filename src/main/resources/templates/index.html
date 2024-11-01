@@ -22,7 +22,9 @@
                 <div class="col-md-2 mb-4" th:each="placeName, iterStat : ${placeNames}" th:if="${iterStat.index < 5}">
                     <a th:href="@{'/place/' + ${placeName}}" class="card-link text-decoration-none text-dark">
                         <div class="card">
-                            <img src="https://via.placeholder.com/150" class="card-img-top" th:alt="'추천 공간 ' + ${iterStat.index + 1}">
+                            <img th:src="@{/images/hotspot/{fileName}(fileName=${placeName} + '.jpg')}"
+                                 class="card-img-top"
+                                 th:alt="'추천 공간 ' + ${iterStat.index + 1}">
                             <div class="card-body text-center">
                                 <p class="card-text" th:text="${placeName}">조용한 장소</p>
                             </div>
@@ -36,7 +38,9 @@
                 <div class="col-md-2 mb-4" th:each="placeName, iterStat : ${placeNames}" th:if="${iterStat.index >= 5 && iterStat.index < 10}">
                     <a th:href="@{'/place/' + ${placeName}}" class="card-link text-decoration-none text-dark">
                         <div class="card">
-                            <img src="https://via.placeholder.com/150" class="card-img-top" th:alt="'추천 공간 ' + ${iterStat.index + 1}">
+                            <img th:src="@{/images/hotspot/{fileName}(fileName=${placeName} + '.jpg')}"
+                                 class="card-img-top"
+                                 th:alt="'추천 공간 ' + ${iterStat.index + 1}">
                             <div class="card-body text-center">
                                 <p class="card-text" th:text="${placeName}">조용한 장소</p>
                             </div>

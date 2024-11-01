@@ -105,7 +105,7 @@ public class PlaceDataService {
             filteredData.append("WEATHER_STTS", jsonObject.getJSONObject("CITYDATA").getJSONArray("WEATHER_STTS"));
             filteredData.append("EVENT_STTS", jsonObject.getJSONObject("CITYDATA").getJSONArray("EVENT_STTS"));
 
-            log.info("API Response filtered: " + filteredData.toString());
+//            log.info("API Response filtered: " + filteredData.toString());
 
             PlaceData placeData = new PlaceData();
             placeData.setPlaceInformation(filteredData.toString());

@@ -12,8 +12,14 @@
 <body>
 <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
     <div class="container">
-        <header class="main-header text-center">
-            <h1 th:text="${placeName}">장소 이름</h1>
+        <header class="main-header">
+            <div class="d-flex align-items-center position-relative">
+                <a th:href="@{/}" class="btn btn-link text-dark position-absolute start-0">
+                    <i class="fas fa-arrow-left"></i>
+                    돌아가기
+                </a>
+                <h1 class="w-100 text-center mb-0" th:text="${placeName}">장소 이름</h1>
+            </div>
         </header>
 
         <div class="row mt-4">
