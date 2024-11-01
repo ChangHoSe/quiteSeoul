@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <title th:text="${placeName}">장소 이름</title>
+
+</head>
+<body>
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
+    <div class="container">
+        <header class="main-header">
+            <div class="d-flex align-items-center position-relative">
+                <a th:href="@{/}" class="btn btn-link text-dark position-absolute start-0">
+                    <i class="fas fa-arrow-left"></i>
+                    돌아가기
+                </a>
+                <h1 class="w-100 text-center mb-0" th:text="${placeName}">장소 이름</h1>
+            </div>
+        </header>
+
+        <div class="row mt-4">
+            <div class="col-md-8 mx-auto text-center">
+                <div class="p-3 border bg-light mb-3">
+                    <div class="weather-container text-center mb-3">
+                        <span class="weather-heading">현재 날씨</span>
+                        <!-- 현재 온도 -->
+                        <div class="temperature">
+                            <span class="temp-value" th:text="${placeWeatherDTO.temperature}">N/A</span>°
+                        </div>
+
+                        <!-- 체감 온도, 습도 및 풍속 -->
+                        <div class="temp-details">
+                            체감 온도 <span th:text="${placeWeatherDTO.sensibleTemp}">N/A</span>° ・ 습도 <span th:text="${placeWeatherDTO.humidity}">N/A</span>%
+                        </div>
+
+                        <!-- 미세먼지 정보 -->
+                        <div class="air-quality-container">
+                            <div class="air-quality-block good">
+                                <span>미세먼지</span>
+                                <span th:text="${placeWeatherDTO.pm10Index}">N/A</span> (<span th:text="${placeWeatherDTO.pm10}">N/A</span>)
+                            </div>
+                            <div class="air-quality-block moderate">
+                                <span>초미세먼지</span>
+                                <span th:text="${placeWeatherDTO.pm25Index}">N/A</span> (<span th:text="${placeWeatherDTO.pm25}">N/A</span>)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <span class="weather-heading">일기 예보</span>
+                    <div class="d-flex flex-row flex-wrap">
+                        <div th:each="fcstTodayDTO : ${placeWeatherDTO.fcstTodayDTOList}" class="weather-card p-3 text-center mb-3 mx-1" >
+                            <!-- 카드 내용 -->
+                            <div class="text-secondary mb-2">
+                                <i class="fas fa-clock fa-sm"></i>
+                                <span class="fw-medium"
+                                      th:text="${#strings.substring(fcstTodayDTO.fcstDt, 8, 10)} + ':' +
+                                  ${#strings.substring(fcstTodayDTO.fcstDt, 10, 12)}">N/A
+                                </span>
+                            </div>
+                            <div class="my-3">
+                                <i th:class="${fcstTodayDTO.skyStts == '맑음' ? 'fas fa-sun text-warning' :
+                              fcstTodayDTO.skyStts == '흐림' ? 'fas fa-cloud text-secondary' :
+                              fcstTodayDTO.precptType == '비' ? 'fas fa-cloud-rain text-primary' :
+                              'fas fa-sun text-warning'} + ' weather-icon'"></i>
+                            </div>
+                            <div class="temperature text-dark">
+                                <span th:text="${fcstTodayDTO.temp}">N/A</span>°
+                            </div>
+                            <div class="text-primary weather-info">
+                                <div>
+                                    <i class="fas fa-tint fa-sm me-1"></i>
+                                    <span class="small" th:text="${fcstTodayDTO.rainChance} + '%'">N/A</span>
+                                </div>
+                                <div class="text-primary small mt-1"
+                                     th:if="${fcstTodayDTO.precipitation != '-' && fcstTodayDTO.precipitation != '0'}">
+                                    <span th:text="${fcstTodayDTO.precipitation} + 'mm'">N/A</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="icon-container">
+                    <img src="/images/btn_naver.svg" title="네이버 지도" onclick="navigateToNaverMap()">
+                    <img src="/images/btn_kakao.svg" title="카카오 지도" onclick="navigateToKakaoMap()">
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="p-3 border bg-light mb-3">
+                    <h5>인구 혼잡도: 여유</h5>
+                    <div>혼잡도 그래프</div>
+                </div>
+                <div class="p-3 border bg-light">
+                    <h5>근처 문화행사</h5>
+                    <div>문화행사 정보</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 comment-section">
+                <h5>댓글 섹션</h5>
+                <textarea class="form-control" rows="4" placeholder="댓글을 작성하세요..."></textarea>
+                <button class="btn btn-custom mt-2">댓글 남기기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    var placeName = '[[${placeName}]]';
+
+    function navigateToNaverMap() {
+        if (placeName) {
+            window.location.href = `https://map.naver.com/p/search/${placeName}`;
+        } else {
+            console.error("Place name is not defined.");
+        }
+    }
+
+    function navigateToKakaoMap() {
+        if (placeName) {
+            window.location.href = `https://map.kakao.com/?q=${placeName}`;
+        } else {
+            console.error("Place name is not defined.");
+        }
+    }
+</script>
+</body>
+</html>
+
