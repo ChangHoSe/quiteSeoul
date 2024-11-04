@@ -51,12 +51,8 @@ public class PlaceDataService {
             "청계산", "청와대", "북창동 먹자골목", "남대문시장", "익선동"
     };
 
-//    @PostConstruct
-//    public void init() {
-//        processAllPlace(tourismPlaces);
-//    }
-
-    public void processAllPlace(String[] places) {
+    public void processAllPlace() {
+        String[] places = tourismPlaces;
         for (String place : places) {
             searchAndSavePlaceData(place);
         }

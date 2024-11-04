@@ -2,11 +2,13 @@ package com.seochang.quiteSeoul.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import com.seochang.quiteSeoul.domain.dto.FcstCongestDTO;
 import com.seochang.quiteSeoul.domain.dto.FcstTodayDTO;
 import com.seochang.quiteSeoul.domain.dto.PlaceCongestionDTO;
 import com.seochang.quiteSeoul.domain.dto.PlaceEventDTO;
 import com.seochang.quiteSeoul.domain.dto.PlaceEventListDTO;
+import com.seochang.quiteSeoul.domain.dto.PlaceInfoDTO;
 import com.seochang.quiteSeoul.domain.dto.PlaceWeatherDTO;
 import com.seochang.quiteSeoul.repository.PlaceDataRepository;
 import com.seochang.quiteSeoul.repository.PlaceRepository;
@@ -27,10 +29,7 @@ public class PlaceService {
     private final PlaceDataRepository placeDataRepository;
     private static final int[] TARGET_WEATHER_INDICES = {0, 2, 5, 8};
 
-    @Value("${SEOUL_API_KEY}")
-    private String apiKey;
-
-    public List<String> initialPlace() {
+    public List<String> findTop10Places() {
         //TODO : 공간 유형 매개변수 처리
         List<String> placeIds = placeDataRepository.findTop10PlacesIds();
         List<String> placeNames = new ArrayList<>();
@@ -42,22 +41,33 @@ public class PlaceService {
         return placeNames;
     }
 
-    public Optional<PlaceWeatherDTO> getWeatherInfoByRegion(String placeName) {
+    public Optional<PlaceInfoDTO> getPlaceInfo(String placeName) {
         return placeRepository.findByPlaceName(placeName)
-                .flatMap(place -> placeDataRepository.findLastestWeatherStatus(place.getPlaceId()))
-                .flatMap(this::handleWeatherStatus);
+                .flatMap(place -> placeDataRepository.findplaceInfo(place.getPlaceId()))
+                .flatMap(this::processPlaceInfo);
     }
 
-    public Optional<PlaceCongestionDTO> getCongestionInfoByRegion(String placeName) {
-        return placeRepository.findByPlaceName(placeName)
-                .flatMap(place -> placeDataRepository.findLastestCongestionStatus(place.getPlaceId()))
-                .flatMap(this::handleCongestionStatus);
-    }
+    private Optional<PlaceInfoDTO> processPlaceInfo(String placeStatus) {
 
-    public Optional<PlaceEventListDTO> getEventInfoByRegion(String placeName) {
-        return placeRepository.findByPlaceName(placeName)
-                .flatMap(place -> placeDataRepository.findLatestEventStatus(place.getPlaceId()))
-                .flatMap(this::handleEventStatus);
+        Object placeWeather = JsonPath.read(placeStatus, "$.WEATHER_STTS");
+        Object placeCongestion = JsonPath.read(placeStatus, "$.LIVE_PPLTN_STTS");
+        Object placeEvent = JsonPath.read(placeStatus, "$.EVENT_STTS");
+
+        PlaceInfoDTO placeInfoDTO = new PlaceInfoDTO();
+
+        handleWeatherStatus(placeWeather.toString())
+                .ifPresent(placeWeatherDTO -> {
+                    placeInfoDTO.setPlaceWeatherDTO(placeWeatherDTO);
+                });
+        handleCongestionStatus(placeCongestion.toString())
+                .ifPresent(placeCongestionDTO -> {
+                    placeInfoDTO.setPlaceCongestionDTO(placeCongestionDTO);
+                });
+        handleEventStatus(placeEvent.toString())
+                .ifPresent(placeEventListDTO -> {
+                    placeInfoDTO.setPlaceEventListDTO(placeEventListDTO);
+                });
+        return Optional.of(placeInfoDTO);
     }
 
     private Optional<PlaceWeatherDTO> handleWeatherStatus(String weatherStatus) {
@@ -168,4 +178,6 @@ public class PlaceService {
             return Optional.empty();
         }
     }
+
+
 }

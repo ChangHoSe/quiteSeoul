@@ -27,30 +27,12 @@ LIMIT 10;
     List<String> findTop10PlacesIds(); // TODO : 선호 테마 파라미터로 넣어서 관련 장소만 출력 예정
 
     @Query(value = """
-SELECT JSON_EXTRACT(place_information, '$.WEATHER_STTS')
-FROM placedata
-WHERE place_id = :placeId
-ORDER BY collected_at DESC 
-LIMIT 1
-""", nativeQuery = true)
-    Optional<String> findLastestWeatherStatus(Integer placeId);
-
-    @Query(value = """
-SELECT JSON_EXTRACT(place_information, '$.LIVE_PPLTN_STTS')
-FROM placedata
-WHERE place_id = :placeId
-ORDER BY collected_at DESC
-LIMIT 1
-""", nativeQuery = true)
-    Optional<String> findLastestCongestionStatus(Integer placeId);
-
-    @Query(value = """
-SELECT JSON_EXTRACT(place_information, '$.EVENT_STTS')
+SELECT place_information
 FROM placedata
 WHERE place_id = :placeId
 ORDER BY collected_at DESC
 LIMIT 1
 """,nativeQuery = true)
-    Optional<String> findLatestEventStatus(Integer placeId);
+    Optional<String> findplaceInfo(Integer placeId);
 
 }

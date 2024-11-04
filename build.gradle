@@ -30,6 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.json:json:20240303'
+	implementation 'com.jayway.jsonpath:json-path:2.9.0'
 	implementation 'com.opencsv:opencsv:5.7.1'
 
 	compileOnly 'org.projectlombok:lombok'

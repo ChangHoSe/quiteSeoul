@@ -199,6 +199,8 @@ header {
 /* styles.css */
 
 .card {
+    width: 170px; /* 카드의 고정 너비 */
+    height: 250px; /* 카드의 고정 높이 */
     border: 1px solid #ccc; /* 카드의 테두리 색상 */
     border-radius: 8px; /* 모서리 둥글기 */
     overflow: hidden; /* 내용이 카드 경계를 넘지 않도록 */
