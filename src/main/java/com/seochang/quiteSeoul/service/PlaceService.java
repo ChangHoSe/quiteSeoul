@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seochang.quiteSeoul.domain.Place;
 import com.seochang.quiteSeoul.domain.PlaceData;
+import com.seochang.quiteSeoul.domain.dto.FcstCongestDTO;
 import com.seochang.quiteSeoul.domain.dto.FcstTodayDTO;
+import com.seochang.quiteSeoul.domain.dto.PlaceCongestionDTO;
 import com.seochang.quiteSeoul.domain.dto.PlaceWeatherDTO;
 import com.seochang.quiteSeoul.repository.PlaceDataRepository;
 import com.seochang.quiteSeoul.repository.PlaceRepository;
@@ -55,6 +57,12 @@ public class PlaceService {
                 .flatMap(this::handleWeatherStatus);
     }
 
+    public Optional<PlaceCongestionDTO> getCongestionInfoByRegion(String placeName) {
+        return placeRepository.findByPlaceName(placeName)
+                .flatMap(place -> placeDataRepository.findLastestCongestionStatus(place.getPlaceId()))
+                .flatMap(this::handleCongestionStatus);
+    }
+
     private Optional<PlaceWeatherDTO> handleWeatherStatus(String weatherStatus) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -73,8 +81,6 @@ public class PlaceService {
             placeWeatherDTO.setAirIdx(weatherStatusNode.path("AIR_IDX").asText());
             placeWeatherDTO.setHumidity(Integer.parseInt(weatherStatusNode.path("HUMIDITY").asText()));
             placeWeatherDTO.setSensibleTemp(Double.parseDouble(weatherStatusNode.path("SENSIBLE_TEMP").asText()));
-
-
 
             // 24시간 예보 목록 추출 및 설정
             List<FcstTodayDTO> fcstTodayDTOList = new ArrayList<>();
@@ -97,19 +103,40 @@ public class PlaceService {
                 }
             }
 
-//            for (JsonNode fcstNode : fcst24HoursArray) {
-//                FcstTodayDTO fcstTodayDTO = new FcstTodayDTO();
-//                fcstTodayDTO.setTemp(Integer.parseInt(fcstNode.path("TEMP").asText()));
-//                fcstTodayDTO.setFcstDt(fcstNode.path("FCST_DT").asText());
-//                fcstTodayDTO.setSkyStts(fcstNode.path("PRECPT_TYPE").asText());
-//                fcstTodayDTO.setRainChance(Integer.parseInt(fcstNode.path("RAIN_CHANCE").asText()));
-//                fcstTodayDTO.setPrecipitation(fcstNode.path("PRECIPITATION").asText());
-//
-//                fcstTodayDTOList.add(fcstTodayDTO);
-//            }
-
             placeWeatherDTO.setFcstTodayDTOList(fcstTodayDTOList);
             return Optional.of(placeWeatherDTO);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    private Optional<PlaceCongestionDTO> handleCongestionStatus(String congestionStatus) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(congestionStatus);
+            JsonNode congestionStatusNode = rootNode.get(0).get(0);
+
+            PlaceCongestionDTO placeCongestionDTO = new PlaceCongestionDTO();
+            placeCongestionDTO.setAreaCongestLvl(congestionStatusNode.path("AREA_CONGEST_LVL").asText());
+            placeCongestionDTO.setAreaCongestMsg(congestionStatusNode.path("AREA_CONGEST_MSG").asText());
+
+            List<FcstCongestDTO> fcstCongestDTOList = new ArrayList<>();
+            JsonNode fcst24HoursArray = congestionStatusNode.path("FCST_PPLTN");
+
+            for (int i = 0; i < fcst24HoursArray.size(); i++) {
+                JsonNode fcstNode = fcst24HoursArray.get(i);
+                FcstCongestDTO fcstCongestDTO = new FcstCongestDTO();
+                fcstCongestDTO.setFcstCongestLvl(fcstNode.path("FCST_CONGEST_LVL").asText());
+                fcstCongestDTO.setFcstTime(fcstNode.path("FCST_TIME").asText());
+                fcstCongestDTO.setFcstMax(Integer.parseInt(fcstNode.path("FCST_PPLTN_MAX").asText()));
+                fcstCongestDTO.setFcstMin(Integer.parseInt(fcstNode.path("FCST_PPLTN_MIN").asText()));
+                fcstCongestDTOList.add(fcstCongestDTO);
+            }
+
+            placeCongestionDTO.setFcstCongestDTO(fcstCongestDTOList);
+            return Optional.of(placeCongestionDTO);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title th:text="${placeName}">장소 이름</title>
 
 </head>
@@ -56,19 +57,18 @@
                         <div th:each="fcstTodayDTO : ${placeWeatherDTO.fcstTodayDTOList}" class="weather-card p-3 text-center mb-3 mx-1" >
                             <!-- 카드 내용 -->
                             <div class="text-secondary mb-2">
-                                <i class="fas fa-clock fa-sm"></i>
-                                <span class="fw-medium"
+                                <span class="fw-bold"
                                       th:text="${#strings.substring(fcstTodayDTO.fcstDt, 8, 10)} + ':' +
                                   ${#strings.substring(fcstTodayDTO.fcstDt, 10, 12)}">N/A
                                 </span>
                             </div>
-                            <div class="my-3">
+                            <div >
                                 <i th:class="${fcstTodayDTO.skyStts == '맑음' ? 'fas fa-sun text-warning' :
                               fcstTodayDTO.skyStts == '흐림' ? 'fas fa-cloud text-secondary' :
                               fcstTodayDTO.precptType == '비' ? 'fas fa-cloud-rain text-primary' :
                               'fas fa-sun text-warning'} + ' weather-icon'"></i>
                             </div>
-                            <div class="temperature text-dark">
+                            <div class="card-temperature">
                                 <span th:text="${fcstTodayDTO.temp}">N/A</span>°
                             </div>
                             <div class="text-primary weather-info">
@@ -94,8 +94,14 @@
 
             <div class="col-md-4">
                 <div class="p-3 border bg-light mb-3">
-                    <h5>인구 혼잡도: 여유</h5>
-                    <div>혼잡도 그래프</div>
+                    <div class="current-status" >
+                        <h5>현재 혼잡도 : <span th:text ="${placeCongestionDTO.areaCongestLvl}" th:class="'status-' + ${placeCongestionDTO.areaCongestLvl}"> 혼잡도 </span></h5>
+                        <p th:text = "${placeCongestionDTO.areaCongestMsg}"> 메세지 </p>
+                    </div>
+                    <h5 class="text-center">인구 예측 차트</h5>
+                    <div class = "chart-container px-2">
+                        <canvas id="congestionChart"></canvas>
+                    </div>
                 </div>
                 <div class="p-3 border bg-light">
                     <h5>근처 문화행사</h5>
@@ -135,6 +141,142 @@
             console.error("Place name is not defined.");
         }
     }
+</script>
+<script th:inline="javascript">
+    // Thymeleaf를 통해 전달된 혼잡도 예측 데이터
+    let congestionData = /*[[${congestionDataJson}]]*/ [];
+
+    // canvas 요소 가져오기
+    const ctx = document.getElementById('congestionChart');
+
+    // 문자열인 경우 JSON 파싱 시도
+    try {
+        if (typeof congestionData === 'string') {
+            congestionData = JSON.parse(congestionData);
+        }
+
+        // 데이터가 없거나 배열이 아닌 경우 빈 배열로 초기화
+        if (!Array.isArray(congestionData)) {
+            console.warn('혼잡도 데이터가 배열 형식이 아닙니다.');
+            congestionData = [];
+        }
+    } catch (error) {
+        console.error('혼잡도 데이터 파싱 중 오류 발생:', error);
+        congestionData = [];
+    }
+
+    // 혼잡도 레벨별 색상 및 그라데이션 설정
+    const congestionColors = {
+        '여유': {
+            base: '#2ecc71',
+            gradient: ctx.getContext('2d').createLinearGradient(0, 0, 0, 400)
+        },
+        '보통': {
+            base: '#f1c40f',
+            gradient: ctx.getContext('2d').createLinearGradient(0, 0, 0, 400)
+        },
+        '약간 붐빔': {  // 데이터의 실제 값에 맞게 수정
+            base: '#e67823',
+            gradient: ctx.getContext('2d').createLinearGradient(0, 0, 0, 400)
+        },
+        '붐빔' : {
+            base: '#ff0000',
+            gradient: ctx.getContext('2d').createLinearGradient(0, 0, 0, 400)
+        }
+    };
+
+    // 데이터 매핑
+    const chartData = congestionData.map(item => ({
+        time: item.fcstTime.slice(11, 16),  // "2024-11-01 12:00" -> "12:00"
+        max: item.fcstMax,
+        min: item.fcstMin,
+        level: item.fcstCongestLvl
+    }));
+
+    // 차트 생성
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.map(item => item.time),
+            datasets: [
+                {
+                    data: chartData.map(item => item.min),
+                    backgroundColor: chartData.map(item => congestionColors[item.level]?.base || '#999'),
+                    type: 'bar',
+                    tension: 0.4,
+                    order: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    titleColor: '#333',
+                    bodyColor: '#666',
+                    borderColor: '#ddd',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: false,
+                    callbacks: {
+                        title: function(context) {
+                            return context[0].label + ' 기준';
+                        },
+                        label: function(context) {
+                            const index = context.dataIndex;
+                            const item = chartData[index];
+                            return [
+                                `예상 인구: ${item.min.toLocaleString()}~${item.max.toLocaleString()}명`,
+                                `혼잡도: ${item.level}`
+                            ];
+                        }
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return (value/10000) + '만';
+                        },
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(224, 224, 224, 0.5)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        callback: function(value, index) {
+                            const hour = parseInt(chartData[index].time.split(':')[0]);
+                            return hour % 2 === 0 ? chartData[index].time : '';
+                        },
+                        font: {
+                            size: 11
+                        }
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+
+    // 차트 컨테이너 높이 설정
+    document.querySelector('.chart-container').style.height = '250px';
 </script>
 </body>
 </html>

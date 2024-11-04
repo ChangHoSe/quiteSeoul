@@ -1,5 +1,7 @@
 package com.seochang.quiteSeoul.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seochang.quiteSeoul.domain.dto.PlaceWeatherDTO;
 import com.seochang.quiteSeoul.service.PlaceService;
 import com.seochang.quiteSeoul.data.InitialDataService;
@@ -35,7 +37,21 @@ public class PlaceController {
         placeService.getWeatherInfoByRegion(placeName)
                 .ifPresent(placeWeatherDTO -> {
                     model.addAttribute("placeWeatherDTO", placeWeatherDTO);
-                    log.info(placeWeatherDTO.toString());
+                });
+        placeService.getCongestionInfoByRegion(placeName)
+                .ifPresent(placeCongestionDTO -> {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String congestionDataJson = "";
+
+                    try {
+                        congestionDataJson = objectMapper.writeValueAsString(placeCongestionDTO.getFcstCongestDTO());
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace(); // 예외를 로그에 출력
+                        // 필요에 따라 적절한 오류 처리를 수행
+                    }
+
+                    model.addAttribute("placeCongestionDTO", placeCongestionDTO);
+                    model.addAttribute("congestionDataJson", congestionDataJson);
                 });
         return "detail";
     }
