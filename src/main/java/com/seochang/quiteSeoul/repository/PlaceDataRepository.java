@@ -44,4 +44,13 @@ LIMIT 1
 """, nativeQuery = true)
     Optional<String> findLastestCongestionStatus(Integer placeId);
 
+    @Query(value = """
+SELECT JSON_EXTRACT(place_information, '$.EVENT_STTS')
+FROM placedata
+WHERE place_id = :placeId
+ORDER BY collected_at DESC
+LIMIT 1
+""",nativeQuery = true)
+    Optional<String> findLatestEventStatus(Integer placeId);
+
 }

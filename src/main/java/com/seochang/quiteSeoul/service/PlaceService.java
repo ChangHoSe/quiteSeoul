@@ -2,28 +2,19 @@ package com.seochang.quiteSeoul.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seochang.quiteSeoul.domain.Place;
-import com.seochang.quiteSeoul.domain.PlaceData;
 import com.seochang.quiteSeoul.domain.dto.FcstCongestDTO;
 import com.seochang.quiteSeoul.domain.dto.FcstTodayDTO;
 import com.seochang.quiteSeoul.domain.dto.PlaceCongestionDTO;
+import com.seochang.quiteSeoul.domain.dto.PlaceEventDTO;
+import com.seochang.quiteSeoul.domain.dto.PlaceEventListDTO;
 import com.seochang.quiteSeoul.domain.dto.PlaceWeatherDTO;
 import com.seochang.quiteSeoul.repository.PlaceDataRepository;
 import com.seochang.quiteSeoul.repository.PlaceRepository;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +52,12 @@ public class PlaceService {
         return placeRepository.findByPlaceName(placeName)
                 .flatMap(place -> placeDataRepository.findLastestCongestionStatus(place.getPlaceId()))
                 .flatMap(this::handleCongestionStatus);
+    }
+
+    public Optional<PlaceEventListDTO> getEventInfoByRegion(String placeName) {
+        return placeRepository.findByPlaceName(placeName)
+                .flatMap(place -> placeDataRepository.findLatestEventStatus(place.getPlaceId()))
+                .flatMap(this::handleEventStatus);
     }
 
     private Optional<PlaceWeatherDTO> handleWeatherStatus(String weatherStatus) {
@@ -141,6 +138,33 @@ public class PlaceService {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    private Optional<PlaceEventListDTO> handleEventStatus(String eventStatus) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(eventStatus);
+            JsonNode eventsStatusNode = rootNode.get(0);
+
+            PlaceEventListDTO placeEventListDTO = new PlaceEventListDTO();
+            List<PlaceEventDTO> placeEventDTOList = new ArrayList<>();
+
+            for (JsonNode eventNode : eventsStatusNode) {
+                PlaceEventDTO placeEventDTO = new PlaceEventDTO();
+
+                placeEventDTO.setUrl(eventNode.path("URL").asText());
+                placeEventDTO.setIsFree(eventNode.path("PAY_YN").asText(null));
+                placeEventDTO.setEventName(eventNode.path("EVENT_NM").asText());
+                placeEventDTO.setThumbnail(eventNode.path("THUMBNAIL").asText());
+                placeEventDTO.setEventPlace(eventNode.path("EVENT_PLACE").asText());
+                placeEventDTO.setEventPeriod(eventNode.path("EVENT_PERIOD").asText());
+                placeEventDTOList.add(placeEventDTO);
+            }
+            placeEventListDTO.setPlaceEventDTOList(placeEventDTOList);
+            return Optional.of(placeEventListDTO);
+        } catch (Exception e) {
             return Optional.empty();
         }
     }

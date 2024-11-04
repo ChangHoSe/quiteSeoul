@@ -248,4 +248,23 @@ header {
 .status-보통 { color: #f1c40f; }
 .status-붐빔 { color: #e74c3c; }
 
+.btn-primary {
+    background-color: #7ed321;
+    border-color: #7ed321;
+}
+.btn-primary:hover {
+    background-color: #6cbf1e; /* 호버 시 색상 변경 (선택적) */
+    border-color: #6cbf1e; /* 호버 시 테두리 색상 변경 (선택적) */
+}
+
+.event-table th {
+    width: 100px !important;
+    white-space: nowrap;
+}
+
+.event-table td {
+    width: auto;
+    word-break: break-word;
+}
+
 

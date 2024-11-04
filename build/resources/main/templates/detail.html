@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -107,9 +108,21 @@
                         <canvas id="congestionChart"></canvas>
                     </div>
                 </div>
-                <div class="p-3 border bg-light">
-                    <h5>근처 문화행사</h5>
-                    <div>문화행사 정보</div>
+
+                <div class="p-3 border bg-light mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0 me-2">근처 문화행사</h5>
+                            <span style="color: #7ed321" id="eventCount"></span> 건
+                        </div>
+
+                        <button type="button"
+                                class="btn btn-outline-primary btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#eventListModal">
+                            자세히 보기
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,9 +137,25 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div class="modal fade" id="eventListModal" tabindex="-1" aria-labelledby="eventListModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventListModalLabel">문화행사 상세정보</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="eventsContainer">
+                    <!-- 이벤트 정보가 여기에 동적으로 추가됨 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     var placeName = '[[${placeName}]]';
 
@@ -285,6 +314,75 @@
 
     // 차트 컨테이너 높이 설정
     document.querySelector('.chart-container').style.height = '250px';
+</script>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const eventDataJson = /*[[${eventDataJson}]]*/ '[]';
+        const events = JSON.parse(eventDataJson);
+        const container = document.getElementById('eventsContainer');
+
+        const eventHTML = events.map((event, index) => {
+            const period = event.eventPeriod.split('~');
+            const startDate = new Date(period[0]).toLocaleDateString();
+            const endDate = new Date(period[1]).toLocaleDateString();
+
+            return `
+                <div class="event-item mb-4">
+                    <div class="row">
+                        <!-- 왼쪽 썸네일 -->
+                        <div class="col-md-5">
+                            <img src="${event.thumbnail}"
+                                 class="img-fluid rounded"
+                                 alt="${event.eventName}"
+                                 style="width: 100%; height: 400px; object-fit: contain;">
+                        </div>
+
+                        <!-- 오른쪽 상세 정보 -->
+                        <div class="col-md-7">
+                            <table class="table event-table">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">행사 제목</th>
+                                        <td>${event.eventName}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="width: 30%">장소</th>
+                                        <td>${event.eventPlace}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">이용요금</th>
+                                        <td>${event.isFree == null ? '무료' : '유료'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">기간</th>
+                                        <td>${startDate} ~ ${endDate}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">웹사이트</th>
+                                        <td>
+                                            <a href="${event.url}" target="_blank" class="btn btn-sm btn-primary">
+                                                행사 페이지
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4">
+            `;
+        }).join('');
+
+        container.innerHTML = eventHTML;
+
+        // 전역 변수로 events 데이터 저장
+        window.eventsList = events;
+
+        // 이벤트 개수 업데이트
+        const countBadge = document.getElementById('eventCount');
+        countBadge.textContent = `${events.length}`;
+    });
 </script>
 </body>
 </html>

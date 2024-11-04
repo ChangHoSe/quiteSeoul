@@ -47,12 +47,24 @@ public class PlaceController {
                         congestionDataJson = objectMapper.writeValueAsString(placeCongestionDTO.getFcstCongestDTO());
                     } catch (JsonProcessingException e) {
                         e.printStackTrace(); // 예외를 로그에 출력
-                        // 필요에 따라 적절한 오류 처리를 수행
                     }
 
                     model.addAttribute("placeCongestionDTO", placeCongestionDTO);
                     model.addAttribute("congestionDataJson", congestionDataJson);
                 });
+        placeService.getEventInfoByRegion(placeName)
+                .ifPresent(placeEventListDTO -> {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String eventDataJson = "";
+
+                    try {
+                        eventDataJson = objectMapper.writeValueAsString(placeEventListDTO.getPlaceEventDTOList());
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                    model.addAttribute("eventDataJson", eventDataJson);
+                });
+
         return "detail";
     }
 
