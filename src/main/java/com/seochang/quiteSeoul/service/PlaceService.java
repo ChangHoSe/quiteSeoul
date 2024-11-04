@@ -93,7 +93,8 @@ public class PlaceService {
                         FcstTodayDTO fcstTodayDTO = new FcstTodayDTO();
                         fcstTodayDTO.setTemp(Integer.parseInt(fcstNode.path("TEMP").asText()));
                         fcstTodayDTO.setFcstDt(fcstNode.path("FCST_DT").asText());
-                        fcstTodayDTO.setSkyStts(fcstNode.path("PRECPT_TYPE").asText());
+                        fcstTodayDTO.setSkyStts(fcstNode.path("SKY_STTS").asText());
+                        fcstTodayDTO.setPrecptType(fcstNode.path("PRECPT_TYPE").asText());
                         fcstTodayDTO.setRainChance(Integer.parseInt(fcstNode.path("RAIN_CHANCE").asText()));
                         fcstTodayDTO.setPrecipitation(fcstNode.path("PRECIPITATION").asText());
 

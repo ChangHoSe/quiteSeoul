@@ -65,15 +65,19 @@
                             <div >
                                 <i th:class="${fcstTodayDTO.skyStts == '맑음' ? 'fas fa-sun text-warning' :
                               fcstTodayDTO.skyStts == '흐림' ? 'fas fa-cloud text-secondary' :
+                              fcstTodayDTO.skyStts == '구름많음' ? 'fas fa-cloud-meatball text-info' :
                               fcstTodayDTO.precptType == '비' ? 'fas fa-cloud-rain text-primary' :
                               'fas fa-sun text-warning'} + ' weather-icon'"></i>
+                            </div>
+                            <div class="text-secondary mt-2" style="font-size: 12px;">
+                                (<span th:text = "${fcstTodayDTO.skyStts}"></span>)
                             </div>
                             <div class="card-temperature">
                                 <span th:text="${fcstTodayDTO.temp}">N/A</span>°
                             </div>
                             <div class="text-primary weather-info">
                                 <div>
-                                    <i class="fas fa-tint fa-sm"></i>
+                                    <i class="fas fa-tint fa-sm me-1"></i>
                                     <span class="small" th:text="${fcstTodayDTO.rainChance} + '%'">N/A</span>
                                 </div>
                                 <div class="text-primary small mt-1"
@@ -241,7 +245,6 @@
             scales: {
                 y: {
                     beginAtZero: true,
-                    max : 30000,
                     ticks: {
                         callback: function(value) {
                             return (value/10000) + '만';
@@ -252,6 +255,10 @@
                     },
                     grid: {
                         color: 'rgba(224, 224, 224, 0.5)'
+                    },
+                    max: function(context) {
+                        const maxValue = Math.max(...context.chart.data.datasets[0].data);
+                        return maxValue * 1.5;
                     }
                 },
                 x: {
