@@ -249,6 +249,7 @@ header {
 .status-여유 { color: #2ecc71; }
 .status-보통 { color: #f1c40f; }
 .status-붐빔 { color: #e74c3c; }
+.status-약간-붐빔 { color: #e67823; }
 
 .btn-primary {
     background-color: #7ed321;
