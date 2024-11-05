@@ -14,5 +14,16 @@ public class BasicController {
     @GetMapping("/register")
     public String register() {return "register";}
 
+    @GetMapping("/login")
+    public String login() {return "login";}
+
+    @GetMapping("/findId")
+    public String findId() {return "findId";}
+
+    @GetMapping("/findPw")
+    public String findPw() {return "findPassword";}
+
+    @GetMapping("/mypage")
+    public String mypage() {return "mypage";}
 
 }

@@ -11,15 +11,21 @@
 <body>
 <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
     <div class="container">
-        <header class="main-header text-center mb-4">
-            <h1>마이페이지</h1>
+        <header class="main-header">
+            <div class="d-flex align-items-center position-relative">
+                <a th:href="@{/}" class="btn btn-link text-dark position-absolute start-0">
+                    <i class="fas fa-arrow-left"></i>
+                    돌아가기
+                </a>
+                <h1 class="w-100 text-center mb-0" >마이 페이지</h1>
+            </div>
         </header>
         <div class="row">
             <div class="profile-container col-md-8 mx-auto">
                 <h3 class>프로필 정보</h3>
                 <div class="row mt-4">
                     <div class="col-8">
-                        <img src="https://via.placeholder.com/100" alt="프로필 사진" class="profile-image">
+<!--                        <img src="https://via.placeholder.com/100" alt="프로필 사진" class="profile-image">-->
                         <p><strong>이메일 주소:</strong> user@example.com</p>
                         <p><strong>아이디:</strong> user123</p>
                         <p><strong>가입일:</strong> 2023년 1월 1일</p>
@@ -40,6 +46,6 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
