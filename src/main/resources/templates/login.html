@@ -35,8 +35,16 @@
                         <input type="checkbox" class="form-check-input" id="rememberMe">
                         <label class="form-check-label" for="rememberMe">아이디 저장</label>
                     </div>
-                    <button type="submit" class="btn btn-custom">로그인</button>
-                    <a th:href="@{/findId}" class="btn btn-link-custom">아이디/비밀번호 찾기</a>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">로그인</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <div class="btn-group-vertical w-100 gap-2">
+                            <a th:href="@{/findId}" class="btn btn-link text-secondary">아이디/비밀번호 찾기</a>
+                            <a th:href="@{/register}" class="btn btn-link text-secondary">회원가입</a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

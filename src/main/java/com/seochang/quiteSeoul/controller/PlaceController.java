@@ -32,43 +32,6 @@ public class PlaceController {
         return "index";
     }
 
-//    @GetMapping("/place/{placeName}")
-//    public String detailPlace(@PathVariable String placeName, Model model) {
-//        model.addAttribute("placeName", placeName);
-//        placeService.getWeatherInfoByRegion(placeName)
-//                .ifPresent(placeWeatherDTO -> {
-//                    model.addAttribute("placeWeatherDTO", placeWeatherDTO);
-//                });
-//        placeService.getCongestionInfoByRegion(placeName)
-//                .ifPresent(placeCongestionDTO -> {
-//                    ObjectMapper objectMapper = new ObjectMapper();
-//                    String congestionDataJson = "";
-//
-//                    try {
-//                        congestionDataJson = objectMapper.writeValueAsString(placeCongestionDTO.getFcstCongestDTO());
-//                    } catch (JsonProcessingException e) {
-//                        e.printStackTrace(); // 예외를 로그에 출력
-//                    }
-//
-//                    model.addAttribute("placeCongestionDTO", placeCongestionDTO);
-//                    model.addAttribute("congestionDataJson", congestionDataJson);
-//                });
-//        placeService.getEventInfoByRegion(placeName)
-//                .ifPresent(placeEventListDTO -> {
-//                    ObjectMapper objectMapper = new ObjectMapper();
-//                    String eventDataJson = "";
-//
-//                    try {
-//                        eventDataJson = objectMapper.writeValueAsString(placeEventListDTO.getPlaceEventDTOList());
-//                    } catch (JsonProcessingException e) {
-//                        e.printStackTrace();
-//                    }
-//                    model.addAttribute("eventDataJson", eventDataJson);
-//                });
-//
-//        return "detail";
-//    }
-
     @GetMapping("/place/{placeName}")
     public String detailPlace(@PathVariable String placeName, Model model) {
         model.addAttribute("placeName", placeName);

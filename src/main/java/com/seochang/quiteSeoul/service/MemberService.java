@@ -19,22 +19,20 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final HttpSession httpSession;
 
+    public boolean checkEmailDuplicate(String email) {
+        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+        return memberOptional.isPresent();
+    }
+
+    public boolean checkNicknameDuplicate(String nickname) {
+        Optional<Member> memberOptional = memberRepository.findByNickname(nickname);
+        return memberOptional.isPresent();
+    }
+
     public void registerMember(MemberDTO memberDTO) {
         Member member = new Member();
         member.setNickname(memberDTO.getNickname());
         member.setEmail(memberDTO.getEmail());
-
-        //중복 이메일 검증
-        memberRepository.findByEmail(memberDTO.getEmail())
-                .ifPresent(existingMember -> {
-                    throw new IllegalArgumentException("이미 존재하는 이메일");
-                });
-
-        //중복 닉네임 검증
-        memberRepository.findByNickname(memberDTO.getNickname())
-                .ifPresent(existingMember -> {
-                    throw new IllegalArgumentException("이미 존재하는 닉네임");
-                });
 
         Optional.ofNullable(memberDTO.getLoginId()).ifPresent(member::setLoginId);
         Optional.ofNullable(memberDTO.getLoginPw())
