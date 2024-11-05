@@ -98,8 +98,18 @@ header {
     object-fit: cover;
     margin-bottom: 15px;
 }
+
 .input-group-text {
+    width: 75px;
+    justify-content: center;
+}
+.input-group-check {
     cursor: pointer;
+    background-color: #e9ecef; /* .input-group-text와 같은 배경 색상 */
+    border: 1px solid #ced4da; /* .input-group-text와 같은 경계선 */
+    padding: 0.375rem 0.75rem; /* .input-group-text와 동일한 패딩 */
+    display: flex;
+    align-items: center;
 }
 
 .col-md-2-4 {

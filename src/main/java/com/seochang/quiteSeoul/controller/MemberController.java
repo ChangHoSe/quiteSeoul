@@ -1,5 +1,6 @@
 package com.seochang.quiteSeoul.controller;
 
+import com.seochang.quiteSeoul.domain.dto.LoginRequestDTO;
 import com.seochang.quiteSeoul.domain.dto.MemberDTO;
 import com.seochang.quiteSeoul.service.MemberService;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class MemberController {
     }
 
     @PostMapping("/register/local")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<Map<String, Object>> localRegister(@RequestBody MemberDTO memberDTO) {
         Map<String, Object> response = new HashMap<>();
         try {
             memberService.registerMember(memberDTO);
@@ -48,6 +49,18 @@ public class MemberController {
         } catch (Exception e) {
             response.put("message", "회원가입 중 오류가 발생했습니다: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/login/local")
+    public ResponseEntity<Map<String, Object>> localLogin(@RequestBody LoginRequestDTO loginRequestDTO) {
+        Map<String, Object> response = new HashMap<>();
+        if (memberService.loginMember(loginRequestDTO)) {
+            response.put("message", "로그인 성공");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else  {
+            response.put("message", "아이디 또는 비밀번호가 잘못되었습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
     }

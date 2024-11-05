@@ -24,7 +24,6 @@
                         <span class="input-group-text">👤</span>
                         <input type="text" id="nickname" class="form-control" placeholder="닉네임" required>
                         <button type="button" class="btn btn-primary" id="checkNickname">중복확인</button>
-<!--                        <span id="nicknameResult" class="input-group-text" style="display: none;"></span>-->
                     </div>
                     <small id="nicknameResult" class="form-text"></small>
                 </div>
@@ -48,7 +47,7 @@
                     <div class="input-group">
                         <span class="input-group-text">🔒</span>
                         <input type="password" id="loginPw" class="form-control" placeholder="비밀번호" required>
-                        <span class="input-group-text" id="togglePassword" onclick="togglePassword('loginPw')">
+                        <span class="input-group-check" id="togglePassword" onclick="togglePassword('loginPw')">
                             <i class="fas fa-eye"></i>
                         </span>
                     </div>
@@ -58,7 +57,7 @@
                     <div class="input-group">
                         <span class="input-group-text">🔒</span>
                         <input type="password" id="confirm-loginPw" class="form-control" placeholder="비밀번호 확인" required>
-                        <span class="input-group-text" id="toggleConfirmPassword" onclick="togglePassword('confirm-loginPw')">
+                        <span class="input-group-check" id="toggleConfirmPassword" onclick="togglePassword('confirm-loginPw')">
                             <i class="fas fa-eye"></i>
                         </span>
                     </div>
