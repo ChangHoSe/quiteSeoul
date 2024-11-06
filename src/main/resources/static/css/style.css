@@ -7,17 +7,17 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    width: 100%;
     padding: 0 10px;
-    /*background-color: #F5F5F5;*/
 }
 
 .container {
     max-width: 1200px;
+    min-height: 800px;
     width: 100%;
     padding: 20px;
-    background-color: #F5F5F5;
     border-radius: 8px;
+    background-color: #F5F5F5;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -86,10 +86,17 @@ header {
 }
 
 .profile-container {
-    background-color: #fff; /* 프로필 배경색 */
+    background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;  /* 중앙 정렬을 위해 추가 */
+    max-width: 800px; /* 원하는 최대 너비 설정 */
+    min-height: 450px;
+}
+
+.mt-custom {
+    margin-top: 100px; /* Adjust as needed */
 }
 .profile-image {
     width: 100px;

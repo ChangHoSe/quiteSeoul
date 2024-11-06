@@ -1,5 +1,6 @@
 package com.seochang.quiteSeoul.controller;
 
+import com.seochang.quiteSeoul.domain.Member;
 import com.seochang.quiteSeoul.domain.dto.LoginRequestDTO;
 import com.seochang.quiteSeoul.domain.dto.MemberDTO;
 import com.seochang.quiteSeoul.service.MemberService;
@@ -9,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +55,12 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/mypage")
+    public String mypage(Model model, @AuthenticationPrincipal Member member) {
+        model.addAttribute("member", member);
+        return "mypage";
+    }
+
 //    @PostMapping("/login/local")
 //    public ResponseEntity<Map<String, Object>> localLogin(@RequestBody LoginRequestDTO loginRequestDTO) {
 //        Map<String, Object> response = new HashMap<>();
@@ -63,4 +72,5 @@ public class MemberController {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 //        }
 //    }
+
 }

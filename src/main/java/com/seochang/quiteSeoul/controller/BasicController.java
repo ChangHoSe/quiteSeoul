@@ -6,16 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class BasicController {
 
-//    @GetMapping("/")
-//    public String initial() {
-//        return "index";
-//    }
-
     @GetMapping("/register")
     public String register() {return "register";}
-
-//    @GetMapping("/login")
-//    public String login() {return "login";}
 
     @GetMapping("/login_form")
     public String loginForm() {return "login_form";}
@@ -25,8 +17,5 @@ public class BasicController {
 
     @GetMapping("/findPw")
     public String findPw() {return "findPassword";}
-
-    @GetMapping("/mypage")
-    public String mypage() {return "mypage";}
 
 }
