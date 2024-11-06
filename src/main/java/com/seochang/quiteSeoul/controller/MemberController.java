@@ -52,16 +52,15 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/login/local")
-    public ResponseEntity<Map<String, Object>> localLogin(@RequestBody LoginRequestDTO loginRequestDTO) {
-        Map<String, Object> response = new HashMap<>();
-        if (memberService.loginMember(loginRequestDTO)) {
-            response.put("message", "로그인 성공");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } else  {
-            response.put("message", "아이디 또는 비밀번호가 잘못되었습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }
-
-    }
+//    @PostMapping("/login/local")
+//    public ResponseEntity<Map<String, Object>> localLogin(@RequestBody LoginRequestDTO loginRequestDTO) {
+//        Map<String, Object> response = new HashMap<>();
+//        if (memberService.loginMember(loginRequestDTO)) {
+//            response.put("message", "로그인 성공");
+//            return ResponseEntity.status(HttpStatus.OK).body(response);
+//        } else  {
+//            response.put("message", "아이디 또는 비밀번호가 잘못되었습니다.");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+//        }
+//    }
 }

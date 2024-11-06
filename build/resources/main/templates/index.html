@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +16,20 @@
         <header class="main-header">
             <div class="d-flex align-items-center position-relative">
                 <h1 class="flex-grow-1 text-center mb-0">조용한 서울</h1>
-                <a th:href="@{/login}" class="btn btn-link text-dark position-absolute start-0">
+
+                <a sec:authorize="!isAuthenticated()" th:href="@{/login_form}" class="btn btn-link text-dark position-absolute start-0">
                     <i class="fa-solid fa-right-to-bracket"></i>
                     로그인
+                </a>
+
+                <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="btn btn-link text-dark position-absolute start-0">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    로그아웃
+                </a>
+
+                <a sec:authorize="isAuthenticated()" th:href="@{/mypage}" class="btn btn-link text-dark position-absolute end-0">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    마이페이지
                 </a>
             </div>
         </header>
