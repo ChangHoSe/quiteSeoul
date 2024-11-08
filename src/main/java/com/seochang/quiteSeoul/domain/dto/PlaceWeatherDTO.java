@@ -22,19 +22,4 @@ public class PlaceWeatherDTO {
     private String airIdx;
     private int humidity;
     private List<FcstTodayDTO> fcstTodayDTOList;
-
-    @Override
-    public String toString() {
-        return "PlaceWeatherDTO{" +
-               "pm10=" + pm10 +
-               ", pm25=" + pm25 +
-               ", temperature=" + temperature +
-               ", maxTemp=" + maxTemp +
-               ", minTemp=" + minTemp +
-               ", sensibleTemp=" + sensibleTemp +
-               ", airIdx='" + airIdx + '\'' +
-               ", humidity=" + humidity +
-               ", fcstTodayDTOList=" + fcstTodayDTOList +
-               '}';
-    }
 }

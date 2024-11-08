@@ -77,17 +77,17 @@ public class PlaceService {
             JsonNode weatherStatusNode = rootNode.get(0).get(0);
 
             PlaceWeatherDTO placeWeatherDTO = new PlaceWeatherDTO();
-            placeWeatherDTO.setPm10(Integer.parseInt(weatherStatusNode.path("PM10").asText()));
-            placeWeatherDTO.setPm25(Integer.parseInt(weatherStatusNode.path("PM25").asText()));
+            placeWeatherDTO.setPm10(Integer.parseInt(weatherStatusNode.path("PM10").asText("0")));
+            placeWeatherDTO.setPm25(Integer.parseInt(weatherStatusNode.path("PM25").asText("0")));
             placeWeatherDTO.setPm10Index(weatherStatusNode.path("PM10_INDEX").asText());
             placeWeatherDTO.setPm25Index(weatherStatusNode.path("PM25_INDEX").asText());
 
-            placeWeatherDTO.setTemperature(Double.parseDouble(weatherStatusNode.path("TEMP").asText()));
-            placeWeatherDTO.setMaxTemp(Double.parseDouble(weatherStatusNode.path("MAX_TEMP").asText()));
-            placeWeatherDTO.setMinTemp(Double.parseDouble(weatherStatusNode.path("MIN_TEMP").asText()));
+            placeWeatherDTO.setTemperature(Double.parseDouble(weatherStatusNode.path("TEMP").asText("0.0")));
+            placeWeatherDTO.setMaxTemp(Double.parseDouble(weatherStatusNode.path("MAX_TEMP").asText("0.0")));
+            placeWeatherDTO.setMinTemp(Double.parseDouble(weatherStatusNode.path("MIN_TEMP").asText("0.0")));
             placeWeatherDTO.setAirIdx(weatherStatusNode.path("AIR_IDX").asText());
-            placeWeatherDTO.setHumidity(Integer.parseInt(weatherStatusNode.path("HUMIDITY").asText()));
-            placeWeatherDTO.setSensibleTemp(Double.parseDouble(weatherStatusNode.path("SENSIBLE_TEMP").asText()));
+            placeWeatherDTO.setHumidity(Integer.parseInt(weatherStatusNode.path("HUMIDITY").asText("0")));
+            placeWeatherDTO.setSensibleTemp(Double.parseDouble(weatherStatusNode.path("SENSIBLE_TEMP").asText("0.0")));
 
             // 24시간 예보 목록 추출 및 설정
             List<FcstTodayDTO> fcstTodayDTOList = new ArrayList<>();

@@ -34,4 +34,6 @@ public class Place {
     @Column(nullable = false)
     private PlaceType placeType;
 
+
+
 }

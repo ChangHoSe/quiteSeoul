@@ -42,7 +42,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    //TODO : 세션 시간 제한
     public boolean loginMember(LoginRequestDTO loginRequestDTO) {
         Optional<Member> memberOptional = memberRepository.findByLoginId(loginRequestDTO.getLoginId());
 

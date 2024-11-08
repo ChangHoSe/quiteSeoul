@@ -50,18 +50,18 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const timeElements = document.querySelectorAll('[th\\:text*="member.lastLoginAt"]', '[th\\:text*="member.createdAt"]');
-        timeElements.forEach(element => {
-            let dateTime = element.textContent;
-            if (dateTime.includes('T')) {
-                dateTime = dateTime.split('.')[0];
-                dateTime = dateTime.replace('T',' ');
-                element.textContent = dateTime;
-            }
-        })
-    })
-</script>
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function() {-->
+<!--        const timeElements = document.querySelectorAll('[th\\:text*="member.lastLoginAt"]', '[th\\:text*="member.createdAt"]');-->
+<!--        timeElements.forEach(element => {-->
+<!--            let dateTime = element.textContent;-->
+<!--            if (dateTime.includes('T')) {-->
+<!--                dateTime = dateTime.split('.')[0];-->
+<!--                dateTime = dateTime.replace('T',' ');-->
+<!--                element.textContent = dateTime;-->
+<!--            }-->
+<!--        })-->
+<!--    })-->
+<!--</script>-->
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +26,7 @@
 
         <div class="row mt-4">
             <div class="col-md-8 mx-auto text-center">
-                <div class="p-3 border bg-light mb-3">
+                <div th:if="${placeWeatherDTO != null}" class="p-3 border bg-light mb-3">
                     <div class="weather-container text-center mb-3">
                         <span class="weather-heading">현재 날씨</span>
                         <!-- 현재 온도 -->
@@ -51,7 +51,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <span class="weather-heading">일기 예보</span>
                     <div class="d-flex flex-row flex-wrap">
@@ -95,9 +94,7 @@
                     <img src="/images/btn_kakao.svg" title="카카오 지도" onclick="navigateToKakaoMap()">
                 </div>
             </div>
-
-
-            <div class="col-md-4">
+            <div th:if="${placeCongestionDTO != null}" class="col-md-4">
                 <div class="p-3 border bg-light mb-3">
                     <div class="current-status" >
                         <h5>현재 혼잡도 : <span th:text ="${placeCongestionDTO.areaCongestLvl}" th:class="'status-' + ${#strings.replace(placeCongestionDTO.areaCongestLvl, ' ', '-')}"> 혼잡도 </span></h5>
@@ -127,11 +124,21 @@
             </div>
         </div>
 
-        <div class="row mt-4">
+        <div  class="row mt-4">
             <div class="col-12 comment-section">
                 <h5>댓글 섹션</h5>
-                <textarea class="form-control" rows="4" placeholder="댓글을 작성하세요..."></textarea>
-                <button class="btn btn-custom mt-2">댓글 남기기</button>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-circle me-2"></i>
+                    <span th:text="${nickname != null ? nickname : 'Guest'}" id="nicknameDisplay"></span>
+                </div>
+                <form sec:authorize="isAuthenticated()" id="commentForm">
+                    <textarea class="form-control" rows="4" name="content" id="text" placeholder="댓글을 작성하세요..."></textarea>
+                    <button class="btn btn-custom mt-2">댓글 남기기</button>
+                </form>
+                <div id="responseMessage" class="mt-2"></div>
+                <div id="commentList">
+                    <!--댓글 목록-->
+                </div>
             </div>
         </div>
     </div>
@@ -383,6 +390,66 @@
         const countBadge = document.getElementById('eventCount');
         countBadge.textContent = `${events.length}`;
     });
+</script>
+<script>
+    $(document).ready(function() {
+        loadComments();
+
+        $('#commentForm').on('submit', function(e) {
+            e.preventDefault();
+            const nickname = document.getElementById('nicknameDisplay')?.textContent || '';
+
+            const commentData = {
+                content: $('#text').val(),
+                placeName: placeName,
+                nickname: nickname
+            };
+
+            $.ajax({
+                url: '/comment/create',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(commentData),
+                success: function(response) {
+                    $('#responseMessage').html(`<div class="alert alert-success">${response.message}</div>`);
+                    $('#text').val('');
+                    loadComments();
+                },
+                error: function(xhr) {
+                    const response = JSON.parse(xhr.responseText);
+                    $('#responseMessage').html(`<div class="alert alert-danger">${response.message}</div>`);
+                }
+            });
+        });
+    });
+    function loadComments() {
+        $.ajax({
+            url : `/comment/${placeName}`,
+            type: 'GET',
+            success: function(comments) {
+                const commentList = $('#commentList');
+                commentList.empty();
+                console.log(comments);
+                comments.forEach(comment => {
+                    const commentElement = `
+                    <div class="comment-item mb-3">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>${comment.nickname}</strong>
+                                <span class="text-muted">${new Date(comment.createdAt).toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <p>${comment.content}</p>
+                    </div>
+                    `;
+                    commentList.append(commentElement);
+                });
+            },
+            error: function(xhr) {
+                console.error('Error loading comments:', xhr.responseText);
+            }
+        });
+    }
 </script>
 </body>
 </html>

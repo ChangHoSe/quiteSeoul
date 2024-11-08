@@ -1,14 +1,12 @@
 package com.seochang.quiteSeoul.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comment")
@@ -25,4 +23,20 @@ public class Comment {
     private String content;
     private int likeCount;
     private double rating;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void created(){
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 }

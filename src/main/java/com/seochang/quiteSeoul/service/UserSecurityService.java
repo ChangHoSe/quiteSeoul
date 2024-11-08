@@ -1,6 +1,7 @@
 package com.seochang.quiteSeoul.service;
 
 import com.seochang.quiteSeoul.domain.Member;
+import com.seochang.quiteSeoul.domain.MemberDetails;
 import com.seochang.quiteSeoul.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +21,7 @@ public class UserSecurityService implements UserDetailsService {
         Member member = memberRepository.findByLoginId(username)
                         .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         member.setLastLoginAt(LocalDateTime.now());
-        return member;
+        memberRepository.save(member);
+        return new MemberDetails(member);
     }
 }

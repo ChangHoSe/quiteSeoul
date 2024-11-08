@@ -3,6 +3,8 @@ package com.seochang.quiteSeoul.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seochang.quiteSeoul.data.PlaceDataService;
+import com.seochang.quiteSeoul.domain.Member;
+import com.seochang.quiteSeoul.domain.MemberDetails;
 import com.seochang.quiteSeoul.domain.dto.PlaceWeatherDTO;
 import com.seochang.quiteSeoul.service.PlaceService;
 import com.seochang.quiteSeoul.data.InitialDataService;
@@ -11,6 +13,7 @@ import java.util.Optional;
 import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +36,7 @@ public class PlaceController {
     }
 
     @GetMapping("/place/{placeName}")
-    public String detailPlace(@PathVariable String placeName, Model model) {
+    public String detailPlace(@PathVariable String placeName, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         model.addAttribute("placeName", placeName);
         placeService.getPlaceInfo(placeName)
                 .ifPresent(placeInfoDTO -> {
@@ -53,6 +56,13 @@ public class PlaceController {
                     model.addAttribute("eventDataJson", eventDataJson);
 
                 });
+        if (memberDetails != null) {
+            model.addAttribute("nickname", memberDetails.getNickname());
+            log.info("member.nickname: {}", memberDetails.getNickname());
+        } else {
+            model.addAttribute("nickname", "Guest"); // 로그인되지 않은 사용자는 'Guest'로 처리
+
+        }
 
         return "detail";
     }
