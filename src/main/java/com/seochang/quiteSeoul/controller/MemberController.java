@@ -1,6 +1,7 @@
 package com.seochang.quiteSeoul.controller;
 
 import com.seochang.quiteSeoul.domain.Member;
+import com.seochang.quiteSeoul.domain.MemberDetails;
 import com.seochang.quiteSeoul.domain.dto.LoginRequestDTO;
 import com.seochang.quiteSeoul.domain.dto.MemberDTO;
 import com.seochang.quiteSeoul.service.MemberService;
@@ -56,8 +57,9 @@ public class MemberController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(Model model, @AuthenticationPrincipal Member member) {
+    public String mypage(Model model, @AuthenticationPrincipal MemberDetails member) {
         model.addAttribute("member", member);
+        member.getNickname();
         return "mypage";
     }
 

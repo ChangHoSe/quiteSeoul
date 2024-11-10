@@ -126,8 +126,8 @@
 
         <div  class="row mt-4">
             <div class="col-12 comment-section">
-                <h5>댓글 섹션</h5>
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center mb-2">
+                    <h5 class="me-3 mb-0">댓글 섹션</h5>
                     <i class="bi bi-person-circle me-2"></i>
                     <span th:text="${nickname != null ? nickname : 'Guest'}" id="nicknameDisplay"></span>
                 </div>
@@ -414,33 +414,59 @@
                     $('#responseMessage').html(`<div class="alert alert-success">${response.message}</div>`);
                     $('#text').val('');
                     loadComments();
+
+                    setTimeout(function() {
+                        $('#responseMessage').html('');
+                    }, 2000);
                 },
                 error: function(xhr) {
                     const response = JSON.parse(xhr.responseText);
                     $('#responseMessage').html(`<div class="alert alert-danger">${response.message}</div>`);
+
+                    setTimeout(function() {
+                        $('#responseMessage').html('');
+                    }, 2000);
                 }
             });
         });
     });
     function loadComments() {
+        const currentUser = document.getElementById('nicknameDisplay')?.textContent || '';
+
         $.ajax({
-            url : `/comment/${placeName}`,
+            url: `/comment/${placeName}`,
             type: 'GET',
+            contentType: 'application/json',
             success: function(comments) {
                 const commentList = $('#commentList');
                 commentList.empty();
-                console.log(comments);
+
                 comments.forEach(comment => {
+                    // 현재 사용자가 댓글 작성자인 경우에만 수정/삭제 버튼 표시
+                    const showActions = currentUser === comment.nickname;
+                    const actionButtons = showActions ? `
+                        <div class="comment-actions">
+                            <button class="btn-primary btn-sm btn-outline-primary edit-comment-btn">수정</button>
+                            <button class="btn-primary btn-sm btn-outline-danger delete-comment-btn">삭제</button>
+                        </div>
+                    ` : '';
+
                     const commentElement = `
-                    <div class="comment-item mb-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <strong>${comment.nickname}</strong>
-                                <span class="text-muted">${new Date(comment.createdAt).toLocaleString()}</span>
+                        <div class="comment-item mb-3" data-comment-id="${comment.commentId}">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>${comment.nickname}</strong>
+                                    <span class="text-muted">${new Date(comment.createdAt).toLocaleString()}</span>
+                                </div>
+                                ${actionButtons}
+                            </div>
+                            <p class="comment-content">${comment.content}</p>
+                            <div class="edit-form" style="display: none;">
+                                <textarea class="form-control edit-comment-text">${comment.content}</textarea>
+                                <button class="btn btn-sm btn-primary save-comment-btn mt-2">저장</button>
+                                <button class="btn btn-sm btn-secondary cancel-edit-btn mt-2">취소</button>
                             </div>
                         </div>
-                        <p>${comment.content}</p>
-                    </div>
                     `;
                     commentList.append(commentElement);
                 });
@@ -450,6 +476,65 @@
             }
         });
     }
+
+    $(document).on('click', '.edit-comment-btn', function () {
+        const commentItem = $(this).closest('.comment-item');
+        commentItem.find('.comment-content').hide();
+        commentItem.find('.edit-form').show();
+    });
+
+    $(document).on('click', '.cancel-edit-btn', function () {
+        const commentItem = $(this).closest('.comment-item');
+        commentItem.find('.comment-content').show();
+        commentItem.find('.edit-form').hide();
+    });
+
+    // 수정 버튼 클릭 이벤트
+    $(document).on('click', '.save-comment-btn', function() {
+        const commentItem = $(this).closest('.comment-item');
+        const commentId = commentItem.data('comment-id');
+        const newContent = commentItem.find('.edit-comment-text').val();
+
+        $.ajax({
+            url: `/comment/${commentId}`,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                    content: newContent
+            }),
+            success: function(response) {
+                commentItem.find('.comment-content').text(newContent).show();
+                commentItem.find('.edit-form').hide();
+            },
+            error: function(xhr) {
+                console.error('Error updating comment:', xhr.responseText);
+                alert('댓글 수정에 실패했습니다.');
+            }
+        });
+    });
+
+    // 삭제 버튼 클릭 이벤트
+    $(document).on('click', '.delete-comment-btn', function() {
+        if (!confirm('정말 이 댓글을 삭제하시겠습니까?')) {
+            return;
+        }
+
+        const commentItem = $(this).closest('.comment-item');
+        const commentId = commentItem.data('comment-id');
+
+        $.ajax({
+            url: `/comment/${commentId}`,
+            type: 'DELETE',
+            success: function(response) {
+                commentItem.remove();
+            },
+            error: function(xhr) {
+                console.error('Error deleting comment:', xhr.responseText);
+                alert('댓글 삭제에 실패했습니다.');
+            }
+        });
+    });
+
 </script>
 </body>
 </html>

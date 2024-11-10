@@ -302,7 +302,7 @@ header {
 }
 /* 댓글 항목 스타일 */
 .comment-item {
-    background-color: #f5f5f5;
+    background-color: #d6d6d6;
     padding: 12px;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);

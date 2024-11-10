@@ -58,12 +58,9 @@ public class PlaceController {
                 });
         if (memberDetails != null) {
             model.addAttribute("nickname", memberDetails.getNickname());
-            log.info("member.nickname: {}", memberDetails.getNickname());
         } else {
             model.addAttribute("nickname", "Guest"); // 로그인되지 않은 사용자는 'Guest'로 처리
-
         }
-
         return "detail";
     }
 

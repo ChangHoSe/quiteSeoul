@@ -9,58 +9,52 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
-    <div class="row justify-content-center w-100">
-        <div class="col-md-6 col-lg-4">
-            <div class="container">
-                <header class="main-header">
-                    <div class="d-flex align-items-center position-relative">
-                        <a th:href="@{/}" class="btn btn-link text-dark position-absolute start-0">
-                            <i class="fas fa-arrow-left"></i>
-                            돌아가기
-                        </a>
-                        <h3 class="w-100 text-center mb-0">로그인</h3>
-                    </div>
-                </header>
-                <form th:action="@{/login}" method="post">
-                    <div th:if="${param.error}">
-                        <div class="alert alert-danger">
-                            사용자ID 또는 비밀번호를 확인해주세요.
-                        </div>
-                    </div>
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-4">
+        <header class="mb-4">
+            <div class="d-flex align-items-center position-relative">
+                <a th:href="@{/}" class="btn btn-link text-dark position-absolute start-0">
+                    <i class="fas fa-arrow-left"></i>
+                    돌아가기
+                </a>
+                <h3 class="w-100 text-center mb-0">로그인</h3>
+            </div>
+        </header>
+        <form th:action="@{/login}" method="post">
+            <div th:if="${param.error}" class="alert alert-danger">
+                사용자ID 또는 비밀번호를 확인해주세요.
+            </div>
 
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <span class="input-group-text">아이디</span>
-                            <input type="text" class="form-control" name="username" id="loginId" placeholder="아이디" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <span class="input-group-text">비밀번호</span>
-                            <input type="password" class="form-control" name="password" id="loginPw" placeholder="비밀번호" required>
-                            <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="rememberMe">
-                        <label class="form-check-label" for="rememberMe">아이디 저장</label>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">로그인</button>
-                    </div>
-
-                </form>
-                <div class="text-center mt-3">
-                    <div class="btn-group-vertical w-100 gap-2">
-                        <a th:href="@{/findId}" class="btn btn-link text-secondary">아이디/비밀번호 찾기</a>
-                        <a th:href="@{/register}" class="btn btn-link text-secondary">회원가입</a>
-                    </div>
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">아이디</span>
+                    <input type="text" class="form-control" name="username" id="loginId" placeholder="아이디" required>
                 </div>
             </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">비밀번호</span>
+                    <input type="password" class="form-control" name="password" id="loginPw" placeholder="비밀번호" required>
+                    <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">아이디 저장</label>
+            </div>
+
+            <div class="d-grid gap-2 mb-3">
+                <button type="submit" class="btn btn-primary">로그인</button>
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a th:href="@{/findId}" class="text-secondary text-decoration-none">아이디/비밀번호 찾기</a>
+            <a th:href="@{/register}" class="text-secondary text-decoration-none">회원가입</a>
         </div>
     </div>
 </div>
