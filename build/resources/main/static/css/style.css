@@ -1,0 +1,332 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.container {
+    max-width: 1200px;
+    min-height: 800px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #F5F5F5;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-header {
+    background-color: #F5F5F5;
+    color: #616161;
+    padding: 10px;
+}
+
+.icon-container {
+    margin-top: 10px; /* 아이콘과 사진 사이의 간격 */
+    text-align: left;
+}
+
+.icon-container img {
+    width: 50px;
+    height: 50px;
+}
+
+.icon {
+    font-size: 24px; /* 아이콘 크기 조정 */
+    margin-right: 15px; /* 아이콘 사이의 간격 */
+    color: #45a049; /* 아이콘 색상 */
+}
+
+.btn-custom {
+    background-color: #45a049; /* 원하는 배경 색상 */
+    color: white; /* 글씨 색상 */
+}
+
+.btn-custom:hover {
+    background-color: #45a049; /* 호버 시 배경 색상 */
+}
+
+.btn-link-custom {
+    color: #45a049;
+}
+
+.image-placeholder {
+    background-color: #ccc;
+    height: 300px; /* 원하는 높이 설정 */
+    width: 100%; /* 부모 요소의 너비에 맞춤 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #666;
+    overflow: hidden; /* 이미지가 넘치지 않도록 설정 */
+}
+
+.image-placeholder img {
+    max-height: 100%; /* 부모 요소의 높이에 맞춤 */
+    max-width: 100%; /* 부모 요소의 너비에 맞춤 */
+    object-fit: cover; /* 비율을 유지하며 잘라내기 */
+}
+
+.comment-section {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.profile-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;  /* 중앙 정렬을 위해 추가 */
+    max-width: 800px; /* 원하는 최대 너비 설정 */
+    min-height: 450px;
+}
+
+.mt-custom {
+    margin-top: 100px; /* Adjust as needed */
+}
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.input-group-text {
+    width: 75px;
+    justify-content: center;
+}
+.input-group-check {
+    cursor: pointer;
+    background-color: #e9ecef; /* .input-group-text와 같은 배경 색상 */
+    border: 1px solid #ced4da; /* .input-group-text와 같은 경계선 */
+    padding: 0.375rem 0.75rem; /* .input-group-text와 동일한 패딩 */
+    display: flex;
+    align-items: center;
+}
+
+.col-md-2-4 {
+    flex: 0 0 20%;
+    max-width: 20%;
+    padding: 0 15px;
+}
+.weather-card {
+    background: linear-gradient(180deg, #EBF5FF 0%, #FFFFFF 100%);
+    border: 1px solid #DBEAFE;
+    border-radius: 0.5rem;
+    height: 85%;
+    flex: 0 0 calc(25% - 10px); /* flex-grow, flex-shrink, flex-basis 설정 */
+    margin: 5px;
+}
+.weather-info {
+    height: 30px; /* 원하는 높이 설정 */
+    display: flex; /* Flexbox로 정렬 */
+    align-items: center; /* 수직 정렬 */
+    justify-content: center;
+}
+.weather-icon {
+    font-size: 2.5rem;
+}
+.card-temperature {
+    font-size: 2.5rem;
+    font-weight: bold;
+    /*justify-content: center;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    text-align: center;
+}
+.dust-info {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
+}
+.weather-heading {
+    font-weight: bold;
+    font-size: 1.5rem; /* 원하는 글씨 크기로 조정 */
+}
+/*temp*/
+.weather-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.temperature {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.temp-details {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.air-quality-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.air-quality-block {
+    flex: 1;
+    padding: 10px;
+    margin: 0 5px;
+    text-align: center;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.air-quality-block span:first-child {
+    display: block;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.air-quality-block.good {
+    background-color: #4a90e2; /* 파랑 */
+}
+
+.air-quality-block.moderate {
+    background-color: #7ed321; /* 초록 */
+}
+
+/* styles.css */
+
+.card {
+    width: 170px; /* 카드의 고정 너비 */
+    height: 250px; /* 카드의 고정 높이 */
+    border: 1px solid #ccc; /* 카드의 테두리 색상 */
+    border-radius: 8px; /* 모서리 둥글기 */
+    overflow: hidden; /* 내용이 카드 경계를 넘지 않도록 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    transition: transform 0.2s; /* 호버 시 애니메이션 효과 */
+    display: flex; /* 플렉스 박스 사용 */
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    align-items: center; /* 가로 방향 가운데 정렬 */
+}
+
+.card:hover {
+    transform: scale(1.05); /* 호버 시 확대 효과 */
+}
+
+.card-img-top {
+    width: 150px; /* 이미지 가로 크기 */
+    height: 150px; /* 이미지 세로 크기 */
+    object-fit: cover; /* 이미지 비율 유지 */
+    margin-top: 16px;
+}
+
+.card-body {
+    padding: 16px; /* 카드 내부 여백 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.card-text {
+    font-size: 1.0rem; /* 텍스트 크기 */
+    color: #333; /* 텍스트 색상 */
+}
+
+.chart-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+}
+
+.current-status {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+}
+.status-여유 { color: #2ecc71; }
+.status-보통 { color: #f1c40f; }
+.status-붐빔 { color: #e74c3c; }
+.status-약간-붐빔 { color: #e67823; }
+
+.btn-primary {
+    background-color: #45a049;
+    border-color: #45a049;
+}
+.btn-primary:hover {
+    background-color: #37803b; /* 호버 시 색상 변경 (선택적) */
+    border-color: #37803b; /* 호버 시 테두리 색상 변경 (선택적) */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* 회색 배경색 */
+    border-color: #6c757d; /* 회색 테두리 색상 */
+    color: white; /* 텍스트 색상 (선택적) */
+    cursor: not-allowed; /* 비활성화된 버튼 커서 */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* 호버 시 색상 변경 */
+    border-color: #5a6268; /* 호버 시 테두리 색상 변경 */
+    color: white; /* 호버 시 텍스트 색상 */
+    cursor: not-allowed; /* 비활성화된 버튼 커서 유지 */
+}
+
+.event-table th {
+    width: 100px !important;
+    white-space: nowrap;
+}
+
+.event-table td {
+    width: auto;
+    word-break: break-word;
+}
+/* 댓글 항목 스타일 */
+.comment-item {
+    background-color: #d6d6d6;
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comment-item .comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.comment-item .comment-header strong {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.comment-item .comment-header .comment-date {
+    font-size: 12px;
+    color: #777;
+}
+
+.comment-item .comment-content {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
